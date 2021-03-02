@@ -49,7 +49,7 @@ def work():
 def main():
     try:
         for c in count():
-            if c % 1000:
+            if c % 100:
                 db.__dict__["dict"].reorganize()
             work()
             time.sleep(60)
