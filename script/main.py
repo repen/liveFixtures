@@ -49,9 +49,9 @@ def work():
 def main():
     try:
         for c in count():
-            if c % 100:
-                db.__dict__["dict"].reorganize()
+            # if c % 100:
             work()
+            db.__dict__["dict"].reorganize()
             time.sleep(60)
     finally:
         db.close()
