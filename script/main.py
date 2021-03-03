@@ -43,25 +43,19 @@ def work():
     except Exception as e:
         result = []
         log.error("Error", exc_info=True)
-    return  result
+    timestamp = datetime.now().timestamp().__int__()
+    db[ str(timestamp) ] = result
 
 def main():
-
-    temp = {}
-    for c in count():
-        if c % 60:
-            db = shelve.open( os.path.join( BASE_DIR, "data", "data.slv" ) )
-            # db.__dict__["dict"].reorganize()
-            db.update( temp )
-            db.close()
-            temp = {}
-
-        data = work()
-        timestamp = datetime.now().timestamp().__int__()
-        temp[ str(timestamp) ] = data
-        
-        time.sleep(60)
-
+    try:
+        for c in count():
+            if c % 100 == 0:
+                db.__dict__["dict"].reorganize()
+            work()
+            time.sleep(60)
+    finally:
+        db.close()
+        log.info("db close")
 
 if __name__ == '__main__':
     main()
