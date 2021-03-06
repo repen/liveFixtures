@@ -10,7 +10,7 @@ from config import TOKEN, BASE_DIR
 from datetime import datetime
 log = _log("MAIN")
 
-db = shelve.open( os.path.join( BASE_DIR, "data", "data.slv" ) )
+# db = shelve.open( os.path.join( BASE_DIR, "data", "data.slv" ) )
 
 url = "https://api-football-v1.p.rapidapi.com/v2/countries"
 headers = {
@@ -44,18 +44,25 @@ def work():
         result = []
         log.error("Error", exc_info=True)
     timestamp = datetime.now().timestamp().__int__()
-    db[ str(timestamp) ] = result
+    return ( str(timestamp),  result )
 
 def main():
-    try:
-        for c in count():
-            if c % 100 == 0:
-                db.__dict__["dict"].reorganize()
-            work()
-            time.sleep(60)
-    finally:
-        db.close()
-        log.info("db close")
+    temp = {}
+    for c in count():
+        
+        if c % 10 == 0:
+            db = shelve.open( os.path.join( BASE_DIR, "data", "data.slv" ) )
+            for key, val in temp.items():
+                db[ key ] = val
+            db.__dict__["dict"].reorganize()
+            db.close()
+            temp.clear()
+            log.info("Dump data. Temp: %s", str(temp))
+
+        date, fixtures = work()
+        temp[date] = fixtures
+        time.sleep(60)
+
 
 if __name__ == '__main__':
     main()
