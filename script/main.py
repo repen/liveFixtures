@@ -50,7 +50,7 @@ def main():
     temp = {}
     for c in count():
         
-        if c % 1 == 0:
+        if c % 30 == 0:
             db = shelve.open( os.path.join( BASE_DIR, "data", "data.slv" ) )
             log.info("Temp len: %d", len(temp))
             for key in list(temp.keys()):
@@ -61,7 +61,7 @@ def main():
 
         date, fixtures = work()
         temp[date] = fixtures
-        time.sleep(6)
+        time.sleep(60)
 
 
 if __name__ == '__main__':
