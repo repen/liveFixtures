@@ -50,18 +50,18 @@ def main():
     temp = {}
     for c in count():
         
-        if c % 10 == 0:
+        if c % 1 == 0:
             db = shelve.open( os.path.join( BASE_DIR, "data", "data.slv" ) )
-            for key, val in temp.items():
-                db[ key ] = val
-            db.__dict__["dict"].reorganize()
+            log.info("Temp len: %d", len(temp))
+            for key in list(temp.keys()):
+                db[ key ] = temp.pop( key )
+            # db.__dict__["dict"].reorganize()
             db.close()
-            temp.clear()
             log.info("Dump data. Temp: %s", str(temp))
 
         date, fixtures = work()
         temp[date] = fixtures
-        time.sleep(60)
+        time.sleep(6)
 
 
 if __name__ == '__main__':
